@@ -26,7 +26,12 @@ public class MapGenerator : MonoBehaviour
     {
         map = new int[width, height];
 
+        RandomFillMap();
 
+        for (int i = 0; i < 5; i++)
+        {
+            SmoothMap();
+        }
     }
 
     void RandomFillMap()
@@ -38,11 +43,41 @@ public class MapGenerator : MonoBehaviour
 
         System.Random pseudoRandom = new System.Random(seed.GetHashCode());
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1: 0;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(x == 0 || x == width-1 || y == 0 || y == height - 1) {
+                    map[x, y] = 1;
+                }
+                else {
+                    map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
+                }
+            }
+        }
+    }
+
+    void SmoothMap()
+    {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+
+            }
+        }
+    }
+
+    int GetSurroundingWallCount(int gridX, int gridY)
+    {
+        int wallCount = 0;
+        for (int neighborX = gridX - 1; neighborX <= gridX + 1; neighborX++) {
+            for (int neighborY = gridY - 1; neighborY <= gridY + 1; neighborY++) {
+                
+                if(neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height)
+                {
+
+                }
+                if(neighborX != gridX || neighborY != gridY)
+                {
+                    wallCount += map[neighborX, neighborY];
+                }
             }
         }
     }
