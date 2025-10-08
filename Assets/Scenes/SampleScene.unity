@@ -436,6 +436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 989600331}
   - component: {fileID: 989600330}
+  - component: {fileID: 989600332}
   m_Layer: 0
   m_Name: Map Generator
   m_TagString: Untagged
@@ -458,8 +459,8 @@ MonoBehaviour:
   width: 50
   height: 50
   seed: woohoo
-  useRandomSeed: 0
-  randomFillPercent: 45
+  useRandomSeed: 1
+  randomFillPercent: 48
 --- !u!4 &989600331
 Transform:
   m_ObjectHideFlags: 0
@@ -475,6 +476,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &989600332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989600329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50cc2210d3e72249b10f2034870883b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
