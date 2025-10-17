@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour
 {
-    private List<(Vector3 start, Vector3 end)> debugLines = new List<(Vector3, Vector3)>();
     public int width;
     public int height;
 
@@ -35,8 +34,6 @@ public class MapGenerator : MonoBehaviour
 
     void GenerateMap()
     {
-        debugLines.Clear();
-
         map = new int[width, height];
 
         RandomFillMap();
@@ -185,12 +182,82 @@ public class MapGenerator : MonoBehaviour
 		}
 	}
 
-	void CreatePassage(Room roomA, Room roomB, Coord tileA, Coord tileB) {
-		Room.ConnectRooms (roomA, roomB);
-		Vector3 start = CoordToWorldPoint(tileA);
-        Vector3 end = CoordToWorldPoint(tileB);
-        debugLines.Add((start, end));
+    void CreatePassage(Room roomA, Room roomB, Coord tileA, Coord tileB)
+    {
+        Room.ConnectRooms(roomA, roomB);
+
+        List<Coord> line = GetLine(tileA, tileB);
+        foreach (Coord c in line)
+        {
+            DrawCircle(c, 1);
+        }
+    }
+    
+    void DrawCircle(Coord c, int r) {
+		for (int x = -r; x <= r; x++) {
+			for (int y = -r; y <= r; y++) {
+				if (x*x + y*y <= r*r) {
+					int drawX = c.tileX + x;
+					int drawY = c.tileY + y;
+					if (IsInMapRange(drawX, drawY)) {
+						map[drawX,drawY] = 0;
+					}
+				}
+			}
+		}
 	}
+
+    List<Coord> GetLine(Coord from, Coord to) {
+		List<Coord> line = new List<Coord> ();
+
+		int x = from.tileX;
+		int y = from.tileY;
+
+		int dx = to.tileX - from.tileX;
+		int dy = to.tileY - from.tileY;
+
+		bool inverted = false;
+		int step = Math.Sign (dx);
+		int gradientStep = Math.Sign (dy);
+
+		int longest = Mathf.Abs (dx);
+		int shortest = Mathf.Abs (dy);
+
+		if (longest < shortest) {
+			inverted = true;
+			longest = Mathf.Abs(dy);
+			shortest = Mathf.Abs(dx);
+
+			step = Math.Sign (dy);
+			gradientStep = Math.Sign (dx);
+		}
+
+		int gradientAccumulation = longest / 2;
+		for (int i =0; i < longest; i ++) {
+			line.Add(new Coord(x,y));
+
+			if (inverted) {
+				y += step;
+			}
+			else {
+				x += step;
+			}
+
+			gradientAccumulation += shortest;
+			if (gradientAccumulation >= longest) {
+				if (inverted) {
+					x += gradientStep;
+				}
+				else {
+					y += gradientStep;
+				}
+				gradientAccumulation -= longest;
+			}
+		}
+
+		return line;
+	}
+
 
     Vector3 CoordToWorldPoint(Coord tile) {
 		return new Vector3 (-width / 2 + .5f + tile.tileX, 2, -height / 2 + .5f + tile.tileY);
@@ -402,14 +469,4 @@ public class MapGenerator : MonoBehaviour
             return otherRoom.roomSize.CompareTo(roomSize);
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        foreach (var line in debugLines)
-        {
-            Gizmos.DrawLine(line.start, line.end);
-        }
-    }
-
 }
