@@ -546,9 +546,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 100
   height: 50
-  seed: woohoo
+  seed: 
   useRandomSeed: 1
-  randomFillPercent: 48
+  randomFillPercent: 53
   wallThreshold: 50
   roomThreshold: 50
 --- !u!4 &989600331
